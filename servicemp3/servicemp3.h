@@ -6,7 +6,6 @@
 #include <lib/dvb/pmt.h>
 #include <lib/dvb/subtitle.h>
 #include <lib/dvb/teletext.h>
-#include <lib/dvb/metaparser.h>
 #include <gst/gst.h>
 /* for subtitles */
 #include <lib/gui/esubtitle.h>
@@ -36,7 +35,6 @@ class eStaticServiceMP3Info: public iStaticServiceInformation
 	DECLARE_REF(eStaticServiceMP3Info);
 	friend class eServiceFactoryMP3;
 	eStaticServiceMP3Info();
-	eDVBMetaParser m_parser;
 public:
 	RESULT getName(const eServiceReference &ref, std::string &name);
 	int getLength(const eServiceReference &ref);
@@ -233,7 +231,6 @@ public:
 		GstPad* pad;
 		subtype_t type;
 		std::string language_code; /* iso-639, if available. */
-		std::string title;
 		subtitleStream()
 			:pad(0)
 		{
@@ -336,7 +333,6 @@ private:
 		stIdle, stRunning, stStopped,
 	};
 	int m_state;
-	bool m_gstdot;
 	GstElement *m_gst_playbin, *audioSink, *videoSink;
 	GstTagList *m_stream_tags;
 	bool m_coverart;
@@ -401,10 +397,6 @@ private:
 	std::string m_extra_headers;
 	RESULT trickSeek(gdouble ratio);
 	ePtr<iTSMPEGDecoder> m_decoder; // for showSinglePic when radio
-
-	std::string m_external_subtitle_path;
-	std::string m_external_subtitle_language;
-	std::string m_external_subtitle_extension;
 };
 
 #endif
